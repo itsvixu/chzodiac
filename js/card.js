@@ -1,6 +1,7 @@
 // Draws the shareable card on a canvas. Evergreen by design: sign, element
 // and one trait only. No birth date or year ever goes on the card.
 import { paintStars } from './sky.js';
+import { artImage } from './illustrations.js';
 
 const W = 1080;
 const H = 1350;
@@ -44,7 +45,7 @@ function roundedRect(ctx, x, y, w, h, r) {
   ctx.closePath();
 }
 
-function draw(ctx, { sign, element, animalIndex }) {
+function draw(ctx, { sign, element, animalIndex, art }) {
   const cx = W / 2;
   const cy = 520;
 
@@ -117,27 +118,34 @@ function draw(ctx, { sign, element, animalIndex }) {
   ctx.font = `600 30px ${BODY}`;
   spaced(ctx, 'CHINESE ZODIAC', cx, 128, 10);
 
-  // The sign
+  // The sign: star-line drawing, or the character if the drawing could not load
   ctx.save();
-  ctx.shadowColor = 'rgba(240,195,106,0.6)';
-  ctx.shadowBlur = 60;
-  ctx.fillStyle = GOLD;
-  ctx.font = `400 400px ${HAN}`;
-  ctx.textBaseline = 'middle';
-  ctx.fillText(sign.hanzi, cx, cy + 10);
+  ctx.shadowColor = 'rgba(240,195,106,0.55)';
+  ctx.shadowBlur = 36;
+  if (art) {
+    ctx.drawImage(art, cx - 235, cy - 235, 470, 470);
+  } else {
+    ctx.fillStyle = GOLD;
+    ctx.font = `400 400px ${HAN}`;
+    ctx.textBaseline = 'middle';
+    ctx.fillText(sign.hanzi, cx, cy + 10);
+  }
   ctx.restore();
 
-  // Seal with the element character
+  // Seal: the sign's character with a drawing, the element's character without
   ctx.save();
-  ctx.translate(790, 700);
+  ctx.translate(800, 742);
   ctx.rotate(-0.07);
+  ctx.shadowColor = 'rgba(0,0,0,0.45)';
+  ctx.shadowBlur = 24;
   ctx.fillStyle = CINNABAR;
-  roundedRect(ctx, -58, -58, 116, 116, 16);
+  roundedRect(ctx, -62, -62, 124, 124, 18);
   ctx.fill();
+  ctx.shadowColor = 'transparent';
   ctx.fillStyle = PAPER;
-  ctx.font = `400 84px ${HAN}`;
+  ctx.font = `400 92px ${HAN}`;
   ctx.textBaseline = 'middle';
-  ctx.fillText(element.hanzi, 0, 4);
+  ctx.fillText(art ? sign.hanzi : element.hanzi, 0, 4);
   ctx.restore();
 
   // Name
@@ -173,9 +181,21 @@ export async function renderCard({ sign, element, animalIndex }) {
   const canvas = document.createElement('canvas');
   canvas.width = W;
   canvas.height = H;
-  draw(canvas.getContext('2d'), { sign, element, animalIndex });
+  const ctx = canvas.getContext('2d');
+  const art = await artImage(animalIndex, 940).catch(() => null);
 
-  const dataUrl = canvas.toDataURL('image/png');
+  let dataUrl;
+  try {
+    draw(ctx, { sign, element, animalIndex, art });
+    dataUrl = canvas.toDataURL('image/png');
+  } catch {
+    // A few older webviews refuse to export a canvas that holds an SVG image.
+    // Start again on a clean canvas with the character in place of the drawing.
+    canvas.width = W;
+    draw(canvas.getContext('2d'), { sign, element, animalIndex, art: null });
+    dataUrl = canvas.toDataURL('image/png');
+  }
+
   let file = null;
   try {
     const blob = await new Promise((resolve) => canvas.toBlob(resolve, 'image/png'));

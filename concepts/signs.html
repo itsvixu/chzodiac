@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>All twelve signs: star-line</title>
+  <meta name="robots" content="noindex">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600&family=Atkinson+Hyperlegible+Next:wght@400;600&display=swap">
+  <link rel="stylesheet" href="../css/styles.css">
+  <link rel="stylesheet" href="signs.css">
+</head>
+<body>
+  <main class="sheet">
+    <p class="eyebrow">Star-line · review sheet</p>
+    <h1>The twelve signs</h1>
+    <p class="body">Every drawing as it appears in the reveal, with its idle motion. Use this page to review the set.</p>
+    <div class="sheet__grid" id="grid"></div>
+    <button class="btn" type="button" id="replay">Replay drawing</button>
+  </main>
+  <script type="module">
+    import { mountArt } from '../js/illustrations.js';
+    import { SIGNS } from '../js/content.js';
+
+    const grid = document.getElementById('grid');
+    function paint() {
+      grid.replaceChildren(...SIGNS.map((sign, i) => {
+        const figure = document.createElement('figure');
+        const art = document.createElement('div');
+        art.className = 'art is-drawn';
+        mountArt(art, i);
+        const caption = document.createElement('figcaption');
+        caption.textContent = sign.name;
+        figure.append(art, caption);
+        return figure;
+      }));
+    }
+    paint();
+    document.getElementById('replay').addEventListener('click', paint);
+  </script>
+</body>
+</html>

@@ -41,13 +41,14 @@
 
     <div id="story" hidden>
       <section class="chapter reveal" id="reveal" aria-live="polite">
-        <p class="eyebrow" data-reveal>You were born in the year of the</p>
+        <p class="eyebrow" data-reveal>Born in the year of the</p>
         <div class="wheel" id="wheel" aria-hidden="true">
           <div class="wheel__orbit wheel__orbit--outer"></div>
           <div class="wheel__orbit wheel__orbit--inner"></div>
           <span class="wheel__pointer"></span>
           <div class="wheel__ring" id="wheel-ring"></div>
-          <div class="wheel__core"><span class="han" data-bind="hanzi"></span></div>
+          <div class="wheel__core"><div class="art" id="wheel-art"></div></div>
+          <span class="wheel__seal han" data-bind="hanzi"></span>
         </div>
         <h2 class="reveal__name" id="reveal-name" tabindex="-1">
           <span data-bind="element"></span> <span data-bind="animal"></span>

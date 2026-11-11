@@ -27,9 +27,10 @@ npm test    # unit tests (Node 20+)
 | `js/content.js` | All copy: traits, element text, compatibility text. |
 | `js/app.js` | UI wiring: forms, reveal, scroll-in animation, sharing. |
 | `js/sky.js` | Starfield background and scroll progress. |
+| `js/illustrations.js` | Star-line drawings for the twelve signs, as animated SVG. |
 | `js/card.js` | Draws the 1080 x 1350 share card on a canvas. |
 | `tests/` | Unit tests for the date table and logic. |
-| `concepts/` | Illustration direction concepts (Monkey and Rooster) for sign-off. Not part of the live flow. |
+| `concepts/` | `signs.html`: review sheet of all twelve drawings. `illustrations.html`: the two directions considered (star-line was chosen). Not part of the live flow. |
 
 ### Zodiac rules
 
@@ -90,7 +91,7 @@ Built for Instagram and TikTok webviews:
 
 ## Before launch
 
-- [ ] Choose an illustration direction (`concepts/illustrations.html`) and draw the other ten signs.
+- [ ] Review and refine the twelve drawings (`concepts/signs.html`); they are a first pass.
 - [ ] Fill the "This month" slot (`[data-slot="this-month"]` in `index.html`).
 - [ ] Test on real devices inside Instagram and TikTok (iOS and Android).
 - [ ] Self-host the fonts so no request goes to Google.

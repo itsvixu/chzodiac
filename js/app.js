@@ -6,6 +6,7 @@ import {
 } from './content.js';
 import { initSky } from './sky.js';
 import { renderCard } from './card.js';
+import { mountArt } from './illustrations.js';
 
 const $ = (selector, root = document) => root.querySelector(selector);
 const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
@@ -165,6 +166,8 @@ function showReading(date) {
     if (i === zodiac.elementIndex) li.setAttribute('aria-current', 'true');
     return li;
   }));
+
+  mountArt($('#wheel-art'), zodiac.animalIndex);
 
   // Reset the wheel, then spin it so the user's sign lands under the pointer.
   clearTimeout(revealTimer);

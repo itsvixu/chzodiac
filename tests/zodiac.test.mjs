@@ -6,6 +6,7 @@ import {
   parseBirthDate, getZodiac, animalRelation, elementRelation, compatibility, ANIMALS,
 } from '../js/zodiac.js';
 import { SIGNS, ELEMENT_INFO } from '../js/content.js';
+import { artSvg } from '../js/illustrations.js';
 
 const sign = (day, month, year) => {
   const z = getZodiac({ day, month, year });
@@ -125,4 +126,16 @@ test('content exists for every sign and element', () => {
     assert.ok(s.cardTrait && s.blurb && s.strength && s.watch);
   });
   assert.equal(ELEMENT_INFO.length, 5);
+});
+
+test('every sign has a well-formed illustration', () => {
+  for (let i = 0; i < 12; i++) {
+    const svg = artSvg(i, { size: 100 });
+    assert.ok(svg.startsWith('<svg xmlns='), ANIMALS[i]);
+    assert.ok(!svg.includes('undefined') && !svg.includes('NaN'), ANIMALS[i]);
+    const opens = (svg.match(/<g[ >]/g) || []).length;
+    const closes = (svg.match(/<\/g>/g) || []).length;
+    assert.equal(opens, closes, `${ANIMALS[i]}: unbalanced groups`);
+    assert.ok(svg.includes('data-anim="blink"'), `${ANIMALS[i]}: eyes`);
+  }
 });

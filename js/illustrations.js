@@ -116,12 +116,10 @@ const ART = [
     group('flick', '163 86', line('M163 86 L178 90 M178 90 l9 -4 M178 90 l7 6')),
   ),
 
-  // Horse: long tapering face, leaf ears, mane on both sides, flowing tail
+  // Horse: long tapering face, upright ears, forelock, flowing tail
   group('sway', '162 190', shape('M162 188 C 198 182, 210 208, 198 228 C 194 212, 182 204, 164 208 Z'))
   + BODY + FEET
   + head(
-    shape('M94 64 C 78 70, 72 84, 77 96 L67 100 C 69 110, 72 117, 77 123 L66 129 C 70 139, 79 143, 91 140 L95 120 Z'),
-    shape('M146 64 C 162 70, 168 84, 163 96 L173 100 C 171 110, 168 117, 163 123 L174 129 C 170 139, 161 143, 149 140 L145 120 Z'),
     shape('M96 62 C 90 46, 94 34, 100 28 C 108 38, 110 50, 108 58 Z'),
     shape('M144 62 C 150 46, 146 34, 140 28 C 132 38, 130 50, 132 58 Z'),
     shape('M90 78 C 90 52, 150 52, 150 78 C 150 104, 142 122, 140 136 C 140 152, 100 152, 100 136 C 98 122, 90 104, 90 78 Z'),
@@ -134,7 +132,7 @@ const ART = [
   // Goat: ridged horns, drooping ears, beard, woolly coat
   group('wag', '160 178', shape('M160 176 C 174 168, 182 172, 180 182 C 174 184, 166 184, 160 180 Z'))
   + BODY
-  + line('M92 174 q9 -9 18 0 q10 -9 20 0 q9 -9 18 0 M98 192 q8 -8 16 0 q6 -8 12 0 q8 -8 16 0')
+  + line('M99 200 q7 -8 14 0 q7 -8 14 0 q7 -8 14 0')
   + FEET
   + head(
     shape('M102 60 C 96 34, 78 20, 58 22 C 71 30, 79 44, 83 66 Z'),
@@ -142,7 +140,7 @@ const ART = [
     line('M91 46 l9 -4 M82 35 l8 -6 M149 46 l-9 -4 M158 35 l-8 -6'),
     shape('M80 84 C 62 82, 48 92, 46 108 C 60 110, 73 103, 82 94 Z'),
     shape('M160 84 C 178 82, 192 92, 194 108 C 180 110, 167 103, 158 94 Z'),
-    shape('M110 136 C 112 150, 116 160, 120 170 C 124 160, 128 150, 130 136 Z'),
+    shape('M111 136 C 113 147, 116 154, 120 160 C 124 154, 127 147, 129 136 Z'),
     shape('M120 52 C 150 52, 164 74, 160 100 C 157 124, 140 140, 120 140 C 100 140, 83 124, 80 100 C 76 74, 90 52, 120 52 Z'),
     line('M104 66 q8 -9 16 0 q8 -9 16 0'),
     eyes([104, 92], [136, 92]),
@@ -185,20 +183,18 @@ const ART = [
     eyes([98, 70, 4]),
   ),
 
-  // Dog: floppy ears, big nose, tongue out, collar, wagging tail
+  // Dog: long drop ears, big nose, tongue out, wagging tail
   group('wag', '160 182', line('M160 182 C 186 174, 198 152, 190 134'))
   + BODY + BELLY + FEET
   + head(
     HEAD,
-    shape('M86 60 C 64 60, 52 84, 58 114 C 72 112, 86 98, 92 76 Z'),
-    shape('M154 60 C 176 60, 188 84, 182 114 C 168 112, 154 98, 148 76 Z'),
+    shape('M84 62 C 66 58, 54 74, 56 100 C 57 120, 64 134, 74 136 C 84 134, 88 118, 88 100 C 88 86, 90 74, 92 68 Z'),
+    shape('M156 62 C 174 58, 186 74, 184 100 C 183 120, 176 134, 166 136 C 156 134, 152 118, 152 100 C 152 86, 150 74, 148 68 Z'),
     eyes([104, 90], [136, 90]),
     ellipse(120, 116, 24, 18),
     dot(120, 107, 7),
     line('M120 114 v5 M120 119 q-7 7 -14 1 M120 119 q7 7 14 1'),
     shape('M116 124 v8 a6 6 0 0 0 12 0 v-8'),
-    line('M92 138 Q120 156 148 138'),
-    circle(120, 153, 6),
   ),
 
   // Pig: wide head, forward ears, big snout, curly tail

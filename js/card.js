@@ -9,7 +9,7 @@ const PAPER = '#f7efe0';
 const CINNABAR = '#d63a2a';
 const HAN = '"Ma Shan Zheng", "Kaiti SC", "STKaiti", "KaiTi", serif';
 const DISPLAY = '"Cormorant Garamond", Georgia, serif';
-const BODY = '"Space Grotesk", system-ui, sans-serif';
+const BODY = '"Atkinson Hyperlegible Next", system-ui, sans-serif';
 
 /** Canvas text only uses web fonts that have finished loading. */
 async function fontsReady(hanzi) {
@@ -18,7 +18,7 @@ async function fontsReady(hanzi) {
     document.fonts.load(`400 100px "Ma Shan Zheng"`, hanzi),
     document.fonts.load(`600 100px "Cormorant Garamond"`),
     document.fonts.load(`italic 500 100px "Cormorant Garamond"`),
-    document.fonts.load(`500 30px "Space Grotesk"`),
+    document.fonts.load(`600 30px "Atkinson Hyperlegible Next"`),
   ]).catch(() => {});
   const timeout = new Promise((resolve) => setTimeout(resolve, 2500));
   await Promise.race([loads, timeout]);
@@ -114,7 +114,7 @@ function draw(ctx, { sign, element, animalIndex }) {
 
   // Eyebrow
   ctx.fillStyle = GOLD;
-  ctx.font = `500 30px ${BODY}`;
+  ctx.font = `600 30px ${BODY}`;
   spaced(ctx, 'CHINESE ZODIAC', cx, 128, 10);
 
   // The sign
@@ -159,8 +159,8 @@ function draw(ctx, { sign, element, animalIndex }) {
   ctx.fillText(sign.cardTrait, cx, 1150);
 
   // Footer
-  ctx.fillStyle = 'rgba(247,239,224,0.6)';
-  ctx.font = `500 26px ${BODY}`;
+  ctx.fillStyle = 'rgba(247,239,224,0.85)';
+  ctx.font = `600 28px ${BODY}`;
   spaced(ctx, 'FIND YOUR SIGN', cx, 1252, 8);
 }
 

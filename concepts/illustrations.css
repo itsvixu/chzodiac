@@ -1,0 +1,156 @@
+/* Illustration direction concepts. Standalone page, not part of the live flow. */
+
+:root {
+  --ink: #07061a;
+  --night: #120e36;
+  --cinnabar: #d63a2a;
+  --gold: #f0c36a;
+  --jade: #4fb89a;
+  --paper: #f7efe0;
+  --text: rgba(247, 239, 224, 0.88);
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font: 400 1.0625rem/1.55 "Atkinson Hyperlegible Next", system-ui, sans-serif;
+  color: var(--paper);
+  background: linear-gradient(180deg, var(--ink), var(--night) 60%, #2a0d1f);
+  background-attachment: fixed;
+}
+
+.defs { position: absolute; }
+
+main { max-width: 30rem; margin: 0 auto; padding: 3rem 1.5rem 4rem; display: grid; gap: 1rem; }
+
+h1, h2 { font-family: "Cormorant Garamond", Georgia, serif; font-weight: 600; line-height: 1.05; margin: 0; }
+h1 { font-size: 2.75rem; }
+h2 { font-size: 2.25rem; }
+p, ul, figure { margin: 0; padding: 0; }
+.body { color: var(--text); }
+.fineprint { font-size: 0.9375rem; color: var(--text); }
+.eyebrow, .tag { font-size: 0.875rem; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--gold); }
+.han { font-family: "Ma Shan Zheng", "Kaiti SC", serif; font-size: 1.5rem; color: var(--gold); margin-right: 0.25rem; }
+
+.direction {
+  display: grid;
+  gap: 0.9rem;
+  margin-top: 1.5rem;
+  padding: 1.5rem 1.25rem;
+  border: 1px solid rgba(240, 195, 106, 0.4);
+  border-radius: 1.25rem;
+  background: rgba(7, 6, 26, 0.55);
+}
+
+.pair { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+figure { display: grid; gap: 0.5rem; justify-items: center; }
+figcaption { font-size: 1rem; display: flex; align-items: center; }
+
+.medallion {
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  border: 1px solid rgba(240, 195, 106, 0.5);
+  background: radial-gradient(circle at 50% 40%, #1b1550, var(--ink) 75%);
+  padding: 6%;
+}
+
+.t-cut .medallion { background: radial-gradient(circle at 50% 40%, #fbf3e2, #f0dfc0 78%); border: 3px solid var(--gold); }
+.medallion svg { display: block; width: 100%; height: 100%; overflow: visible; }
+
+.notes { list-style: none; display: grid; gap: 0.4rem; font-size: 1rem; color: var(--text); }
+.notes strong { color: var(--paper); }
+
+.replay {
+  margin-top: 1rem;
+  min-height: 3.25rem;
+  font: 600 1.0625rem/1 inherit;
+  font-family: inherit;
+  color: #2a0a06;
+  background: linear-gradient(180deg, #f7d58c, #c8963a);
+  border: 0;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.replay:focus-visible { outline: 2px solid var(--paper); outline-offset: 3px; }
+
+/* ---------- Shared idle motion (transform only) -------------------------- */
+
+.shape, .limb, .detail { stroke-linecap: round; stroke-linejoin: round; }
+.limb, .detail { fill: none; }
+
+.m-tail { transform-origin: 152px 196px; animation: sway 3.2s ease-in-out infinite; }
+.m-arm { transform-origin: 90px 170px; animation: wave 2.4s ease-in-out infinite; }
+.m-head { transform-origin: 120px 140px; animation: tilt 4.8s ease-in-out infinite; }
+.m-ear--l { transform-origin: 84px 96px; animation: ear 4.8s ease-in-out infinite; }
+.m-ear--r { transform-origin: 156px 96px; animation: ear 4.8s ease-in-out infinite reverse; }
+.blink { transform-box: fill-box; transform-origin: center; animation: blink 4.2s infinite; }
+
+.r-bob { transform-origin: 125px 218px; animation: strut 2.6s ease-in-out infinite; }
+.r-comb { transform-origin: 105px 62px; animation: wobble 2.6s ease-in-out infinite; }
+.r-wattle { transform-origin: 88px 86px; animation: sway 1.3s ease-in-out infinite; }
+.r-feather { transform-origin: 162px 146px; animation: fan 3s ease-in-out infinite; }
+.r-feather:nth-child(2) { animation-delay: -0.3s; }
+.r-feather:nth-child(3) { animation-delay: -0.6s; }
+.r-feather:nth-child(4) { animation-delay: -0.9s; }
+
+@keyframes sway { 0%, 100% { transform: rotate(-7deg); } 50% { transform: rotate(8deg); } }
+@keyframes wave { 0%, 100% { transform: rotate(0deg); } 50% { transform: rotate(14deg); } }
+@keyframes tilt { 0%, 100% { transform: rotate(-3deg); } 50% { transform: rotate(3deg); } }
+@keyframes ear { 0%, 86%, 100% { transform: rotate(0deg); } 90% { transform: rotate(-10deg); } 95% { transform: rotate(6deg); } }
+@keyframes blink { 0%, 93%, 100% { transform: scaleY(1); } 96% { transform: scaleY(0.1); } }
+@keyframes strut { 0%, 100% { transform: rotate(0deg); } 30% { transform: rotate(-4deg) translateY(-3px); } 60% { transform: rotate(2deg); } }
+@keyframes wobble { 0%, 100% { transform: rotate(0deg); } 35% { transform: rotate(9deg); } 65% { transform: rotate(-5deg); } }
+@keyframes fan { 0%, 100% { transform: rotate(-4deg); } 50% { transform: rotate(7deg); } }
+
+/* ---------- Direction A: star-line -------------------------------------- */
+
+.t-line .shape { fill: #130f3d; stroke: var(--gold); stroke-width: 2.6; }
+.t-line .limb, .t-line .detail { stroke: var(--gold); stroke-width: 2.6; }
+.t-line .eye { fill: var(--gold); }
+.t-line svg { filter: drop-shadow(0 0 5px rgba(240, 195, 106, 0.45)); }
+
+/* every stroke has pathLength="1", so one dash value draws any shape */
+.t-line .shape, .t-line .limb, .t-line .detail {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation-name: draw;
+  animation-duration: 1.5s;
+  animation-timing-function: cubic-bezier(0.5, 0, 0.2, 1);
+  animation-fill-mode: forwards;
+  animation-iteration-count: 1;
+}
+
+.t-line .eye { opacity: 0; animation: appear 0.5s 1.5s forwards; }
+@keyframes draw { to { stroke-dashoffset: 0; } }
+@keyframes appear { to { opacity: 1; } }
+
+/* in star-line the parts that carry their own idle loop keep it via their parent group */
+.t-line .m-tail { animation: draw 1.5s cubic-bezier(0.5, 0, 0.2, 1) forwards, sway 3.2s ease-in-out 1.5s infinite; }
+.t-line .r-feather { animation: draw 1.5s cubic-bezier(0.5, 0, 0.2, 1) forwards, fan 3s ease-in-out 1.5s infinite; }
+.t-line .r-comb { animation: draw 1.5s cubic-bezier(0.5, 0, 0.2, 1) forwards, wobble 2.6s ease-in-out 1.5s infinite; }
+.t-line .r-wattle { animation: draw 1.5s cubic-bezier(0.5, 0, 0.2, 1) forwards, sway 1.3s ease-in-out 1.5s infinite; }
+
+/* ---------- Direction B: paper-cut -------------------------------------- */
+
+.t-cut .main { fill: var(--cinnabar); }
+.t-cut .light { fill: #fbe9c6; }
+.t-cut .accent { fill: #e9a93a; }
+.t-cut .jade { fill: #2f9a7c; }
+.t-cut .limb { stroke: var(--cinnabar); stroke-width: 12; }
+.t-cut .detail { stroke: #5a120b; stroke-width: 3; }
+.t-cut .r-leg { stroke: #c98a1e; stroke-width: 5; }
+.t-cut .eye { fill: #2a0a06; }
+.t-cut svg { animation: pop 0.8s cubic-bezier(0.34, 1.5, 0.5, 1) both; }
+
+@keyframes pop { from { opacity: 0; transform: scale(0.6) rotate(-8deg); } to { opacity: 1; transform: none; } }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-delay: 0s !important;
+    animation-iteration-count: 1 !important;
+  }
+}

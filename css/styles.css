@@ -12,12 +12,17 @@
   --gold: #f0c36a;
   --gold-deep: #c8963a;
   --paper: #f7efe0;
-  --muted: rgba(247, 239, 224, 0.7);
-  --line: rgba(240, 195, 106, 0.28);
+  /* Text colours are checked against the darkest and lightest parts of the sky:
+     every text style below meets WCAG AA (4.5:1), most meet AAA (7:1). */
+  --muted: rgba(247, 239, 224, 0.88);
+  --quiet: rgba(247, 239, 224, 0.8);
+  --cinnabar-text: #ff8f7a; /* cinnabar lightened for text on the night sky */
+  --line: rgba(240, 195, 106, 0.28); /* decorative rules only */
+  --line-strong: rgba(240, 195, 106, 0.65); /* control borders: 3:1 or better */
   --element: var(--gold); /* set from JS to the user's element colour */
 
   --font-display: "Cormorant Garamond", "Iowan Old Style", Georgia, serif;
-  --font-body: "Space Grotesk", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-body: "Atkinson Hyperlegible Next", "Atkinson Hyperlegible", system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-han: "Ma Shan Zheng", "Kaiti SC", "STKaiti", "KaiTi", "Songti SC", serif;
 
   --ease-out: cubic-bezier(0.16, 0.84, 0.24, 1);
@@ -65,7 +70,7 @@ img { display: block; max-width: 100%; height: auto; }
   overflow: hidden;
   pointer-events: none;
   background:
-    radial-gradient(120% 60% at 50% 108%, rgba(214, 58, 42, 0.34), transparent 70%),
+    radial-gradient(120% 60% at 50% 108%, rgba(214, 58, 42, 0.22), transparent 70%),
     radial-gradient(90% 50% at 85% -5%, rgba(74, 58, 190, 0.38), transparent 70%),
     linear-gradient(180deg, var(--ink) 0%, var(--night) 55%, var(--plum) 100%);
 }
@@ -76,6 +81,7 @@ img { display: block; max-width: 100%; height: auto; }
   top: 0;
   width: 100%;
   height: 125%;
+  opacity: 0.6; /* keep stars quiet behind body copy */
   will-change: transform;
 }
 
@@ -149,9 +155,9 @@ main {
 }
 
 .eyebrow {
-  font-size: 0.8125rem;
-  font-weight: 500;
-  letter-spacing: 0.2em;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--gold);
 }
@@ -161,7 +167,7 @@ main {
   letter-spacing: 0.05em;
   margin-right: 0.4em;
   vertical-align: -0.12em;
-  color: var(--cinnabar);
+  color: var(--cinnabar-text);
   text-shadow: 0 0 14px rgba(214, 58, 42, 0.7);
 }
 
@@ -186,7 +192,7 @@ h1::after {
 }
 
 .lede, .body { color: var(--muted); max-width: 34ch; }
-.fineprint { font-size: 0.8125rem; line-height: 1.5; color: rgba(247, 239, 224, 0.55); }
+.fineprint { font-size: 0.9375rem; line-height: 1.5; color: var(--quiet); }
 
 /* Scroll-in reveals: JS adds .in when the element enters the viewport. */
 [data-reveal] {
@@ -216,8 +222,9 @@ h1::after {
 .date-form { margin-top: 0.5rem; }
 
 .date-form legend {
-  font-size: 0.8125rem;
-  letter-spacing: 0.14em;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--muted);
   margin-bottom: 0.75rem;
@@ -231,7 +238,7 @@ h1::after {
 
 .date-form label span {
   display: block;
-  font-size: 0.75rem;
+  font-size: 0.9375rem;
   color: var(--muted);
   margin-bottom: 0.3rem;
 }
@@ -244,20 +251,20 @@ h1::after {
   font-variant-numeric: tabular-nums;
   text-align: center;
   color: var(--paper);
-  background: rgba(7, 6, 26, 0.6);
-  border: 1px solid var(--line);
+  background: rgba(7, 6, 26, 0.75);
+  border: 1.5px solid var(--line-strong);
   border-radius: 0.75rem;
   appearance: none;
   -webkit-appearance: none;
   transition: border-color 0.2s, box-shadow 0.2s;
 }
 
-.date-form input::placeholder { color: rgba(247, 239, 224, 0.28); }
+.date-form input::placeholder { color: rgba(247, 239, 224, 0.6); }
 
 .date-form input:focus {
   outline: none;
   border-color: var(--gold);
-  box-shadow: 0 0 0 3px rgba(240, 195, 106, 0.22);
+  box-shadow: 0 0 0 3px rgba(240, 195, 106, 0.45);
 }
 
 .date-form input[aria-invalid="true"] { border-color: #ff8a73; }
@@ -265,8 +272,8 @@ h1::after {
 .date-form__error {
   min-height: 1.4em;
   margin: 0.6rem 0 0.4rem;
-  font-size: 0.875rem;
-  color: #ffa692;
+  font-size: 1rem;
+  color: #ffb3a3;
 }
 
 .btn {
@@ -276,8 +283,8 @@ h1::after {
   width: 100%;
   min-height: 3.5rem;
   padding: 0 1.5rem;
-  font: 600 1.0625rem/1 var(--font-body);
-  letter-spacing: 0.02em;
+  font: 700 1.125rem/1 var(--font-body);
+  letter-spacing: 0.01em;
   color: #2a0a06;
   text-decoration: none;
   background: linear-gradient(180deg, #f7d58c, var(--gold-deep));
@@ -290,12 +297,12 @@ h1::after {
 }
 
 .btn:active { transform: scale(0.97); }
-.btn:focus-visible { outline: 2px solid var(--paper); outline-offset: 3px; }
+.btn:focus-visible { outline: 3px solid var(--paper); outline-offset: 3px; }
 
 .btn--ghost {
   color: var(--gold);
-  background: transparent;
-  border: 1px solid var(--line);
+  background: rgba(7, 6, 26, 0.45);
+  border: 1.5px solid var(--line-strong);
   box-shadow: none;
 }
 
@@ -429,13 +436,13 @@ h1::after {
 
 .reveal__name { font-size: clamp(2.75rem, 13vw, 3.75rem); outline: none; }
 .reveal__name span:first-child { color: var(--element); }
-.reveal__pinyin { font-size: 0.875rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold); }
-.reveal__note { font-size: 0.9375rem; color: var(--muted); max-width: 32ch; }
+.reveal__pinyin { font-size: 1rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold); }
+.reveal__note { font-size: 1.0625rem; color: var(--muted); max-width: 32ch; }
 
 .scroll-cue {
   margin-top: 1rem;
-  font-size: 0.6875rem;
-  letter-spacing: 0.3em;
+  font-size: 0.875rem;
+  letter-spacing: 0.24em;
   text-transform: uppercase;
   color: var(--muted);
 }
@@ -462,10 +469,10 @@ h1::after {
 
 .chips li {
   padding: 0.55rem 1rem;
-  font-size: 0.9375rem;
-  font-weight: 500;
+  font-size: 1.0625rem;
+  font-weight: 600;
   color: var(--gold);
-  border: 1px solid var(--line);
+  border: 1px solid var(--line-strong);
   border-radius: 999px;
   background: rgba(240, 195, 106, 0.07);
 }
@@ -478,16 +485,16 @@ h1::after {
 .note-card {
   padding: 1.1rem 1.25rem;
   border-radius: 1rem;
-  background: rgba(7, 6, 26, 0.5);
-  border: 1px solid rgba(247, 239, 224, 0.1);
+  background: rgba(7, 6, 26, 0.7);
+  border: 1px solid rgba(247, 239, 224, 0.18);
   border-left: 3px solid var(--cinnabar);
 }
 
 .note-card + .note-card { border-left-color: var(--gold); }
 
 .note-card h3, .facts dt {
-  font: 500 0.75rem/1.2 var(--font-body);
-  letter-spacing: 0.16em;
+  font: 600 0.875rem/1.2 var(--font-body);
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--muted);
   margin-bottom: 0.35rem;
@@ -538,7 +545,7 @@ h1::after {
   border-bottom: 1px solid var(--line);
 }
 
-.facts dd { font-size: 0.9375rem; font-weight: 500; }
+.facts dd { font-size: 1.0625rem; font-weight: 600; }
 .facts .han { font-size: 1.25rem; color: var(--gold); }
 
 .cycle { display: flex; justify-content: space-between; gap: 0.25rem; }
@@ -550,10 +557,11 @@ h1::after {
   align-items: center;
   gap: 0.2rem;
   padding: 0.6rem 0;
-  font-size: 0.6875rem;
-  letter-spacing: 0.08em;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
-  color: rgba(247, 239, 224, 0.45);
+  color: var(--quiet);
   border-radius: 0.75rem;
 }
 
@@ -573,9 +581,9 @@ h1::after {
   padding: 2.25rem 1.5rem;
   text-align: center;
   color: var(--muted);
-  border: 1px dashed var(--line);
+  border: 1px dashed var(--line-strong);
   border-radius: 1.25rem;
-  background: rgba(7, 6, 26, 0.4);
+  background: rgba(7, 6, 26, 0.6);
 }
 
 .slot__title { font-family: var(--font-display); font-size: 1.75rem; color: var(--paper); }
@@ -612,6 +620,21 @@ h1::after {
 .card-frame img { width: 100%; height: 100%; -webkit-touch-callout: default; user-select: auto; }
 
 .actions { display: grid; gap: 0.625rem; }
+.actions__row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.625rem; }
+.actions .fineprint { text-align: center; }
+
+.steps {
+  display: grid;
+  gap: 0.5rem;
+  padding: 1.1rem 1.25rem 1.1rem 2.5rem;
+  list-style: decimal;
+  color: var(--muted);
+  border-radius: 1rem;
+  background: rgba(7, 6, 26, 0.7);
+  border: 1px solid var(--line-strong);
+}
+
+.steps::marker, .steps li::marker { color: var(--gold); font-weight: 700; }
 
 /* ---------- Compatibility ------------------------------------------------ */
 
@@ -661,16 +684,19 @@ h1::after {
 
 .match__score small {
   display: block;
-  margin-top: 0.2rem;
-  font: 500 0.6875rem/1 var(--font-body);
-  letter-spacing: 0.2em;
+  margin-top: 0.3rem;
+  font: 600 0.875rem/1 var(--font-body);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
   color: var(--muted);
 }
 
-.match__names { font-size: 0.8125rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold); text-align: center; }
+.match__names { font-size: 0.9375rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gold); text-align: center; }
 .match__title { font: 600 2rem/1.1 var(--font-display); outline: none; }
 
 /* ---------- Footer ------------------------------------------------------- */
+
+.footer .btn { min-height: 3.25rem; }
 
 .footer {
   display: grid;
@@ -699,3 +725,19 @@ h1::after {
   .sky__comet { display: none; }
   .sky__twinkles span { opacity: 0.7; }
 }
+
+/* Same rules for the on-page "Pause animations" switch (html.reduce-motion). */
+.reduce-motion { scroll-behavior: auto; }
+
+.reduce-motion *,
+.reduce-motion *::before,
+.reduce-motion *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  animation-delay: 0s !important;
+  transition-duration: 0.01ms !important;
+  transition-delay: 0s !important;
+}
+
+.reduce-motion .sky__comet { display: none; }
+.reduce-motion .sky__twinkles span { opacity: 0.7; }

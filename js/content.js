@@ -132,7 +132,7 @@ export const POLARITY_INFO = {
 export const ANIMAL_RELATION_COPY = {
   harmony: {
     title: 'Secret friends',
-    text: 'One of the six harmonies: a pairing tradition treats as quietly made for each other. You fill in each other’s gaps without being asked.',
+    text: 'One of the six harmonies: signs that tradition says quietly look out for each other. Seat these two together at the reunion dinner.',
   },
   trine: {
     title: 'Kindred spirits',
@@ -144,15 +144,15 @@ export const ANIMAL_RELATION_COPY = {
   },
   neutral: {
     title: 'Good neighbours',
-    text: 'No ancient drama here. Nothing is promised and nothing is in the way, so what you build is entirely up to you two.',
+    text: 'No ancient drama here. Nothing is promised and nothing is in the way, so it is whatever the two of you make it.',
   },
   harm: {
     title: 'Worth the effort',
-    text: 'Tradition says these signs can rub each other the wrong way. Name the friction early and it usually turns into a running joke.',
+    text: 'Tradition says these signs can rub each other the wrong way. Name the friction early and it usually becomes a family joke.',
   },
   clash: {
     title: 'Opposites on the wheel',
-    text: 'You sit directly across from each other, which makes for sparks. Opposites see what the other misses, when they are willing to listen.',
+    text: 'You sit directly across the wheel from each other, which makes for lively dinners. Opposites see what the other misses, when they are willing to listen.',
   },
 };
 

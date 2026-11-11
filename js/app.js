@@ -10,13 +10,17 @@ import { renderCard } from './card.js';
 const $ = (selector, root = document) => root.querySelector(selector);
 const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
 
-const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+const root = document.documentElement;
+/** True when the device asks for less motion or the visitor paused animations here. */
+const reducedMotion = () => motionQuery.matches || root.classList.contains('reduce-motion');
 
 const story = $('#story');
 const revealSection = $('#reveal');
 const wheel = $('#wheel');
 const ring = $('#wheel-ring');
 const shareHint = $('#share-hint');
+const shareSteps = $('#share-steps');
 const DEFAULT_SHARE_HINT = shareHint.textContent;
 
 let you = null; // the current reading; gone as soon as the tab closes
@@ -93,7 +97,7 @@ function armReveals() {
 }
 
 function scrollToEl(el) {
-  el.scrollIntoView({ behavior: reducedMotion ? 'auto' : 'smooth', block: 'start' });
+  el.scrollIntoView({ behavior: reducedMotion() ? 'auto' : 'smooth', block: 'start' });
 }
 
 /* ---------- Reveal -------------------------------------------------------- */
@@ -125,7 +129,7 @@ function showReading(date) {
     ? `Lunar New Year fell on ${newYear}, after your birthday, so you belong to the year before.`
     : `The Year of the ${sign.name} began on ${newYear}.`;
 
-  document.documentElement.style.setProperty('--element', element.color);
+  root.style.setProperty('--element', element.color);
   bind({
     hanzi: sign.hanzi,
     animal: sign.name,
@@ -185,7 +189,7 @@ function showReading(date) {
     revealSection.classList.add('is-live');
     ring.style.setProperty('--turn', `${-720 - zodiac.animalIndex * 30}deg`);
     $('#reveal-name').focus({ preventScroll: true });
-  }, reducedMotion ? 0 : 450);
+  }, reducedMotion() ? 0 : 450);
 }
 
 /* ---------- Share card ---------------------------------------------------- */
@@ -196,6 +200,7 @@ const saveLink = $('#save-link');
 async function prepareCard() {
   card = null;
   shareHint.textContent = DEFAULT_SHARE_HINT;
+  shareSteps.hidden = true;
   const reading = you;
   const rendered = await renderCard({
     sign: reading.sign, element: reading.elementInfo, animalIndex: reading.animalIndex,
@@ -207,36 +212,61 @@ async function prepareCard() {
   saveLink.href = rendered.dataUrl;
 }
 
-const LONG_PRESS_HINT = 'Press and hold the card to save it, then share it from your photos.';
+const pageUrl = () => location.origin + location.pathname; // never includes a birth date
 
+function showSaveSteps(message) {
+  shareHint.textContent = message;
+  shareSteps.hidden = false;
+  scrollToEl($('.card-frame'));
+}
+
+// One button, the phone's own share menu. That menu lists the apps the visitor
+// actually has (Instagram, WhatsApp, Facebook...) and can pass the image itself,
+// which brand buttons on a web page cannot do.
 $('#share-btn').addEventListener('click', async () => {
   if (!card || !you) return;
   const data = {
     title: `I'm a ${you.element} ${you.animal}`,
     text: `I'm a ${you.element} ${you.animal} in the Chinese zodiac. What are you?`,
+    url: pageUrl(),
   };
-  // Many in-app browsers cannot share files; fall back to long-press saving.
-  if (card.file && navigator.canShare?.({ files: [card.file] })) {
-    try {
+  try {
+    if (card.file && navigator.canShare?.({ files: [card.file] })) {
       await navigator.share({ ...data, files: [card.file] });
       return;
-    } catch (error) {
-      if (error.name === 'AbortError') return; // user closed the share sheet
     }
+    if (navigator.share) {
+      // Link-only share (some in-app browsers cannot pass images).
+      await navigator.share(data);
+      showSaveSteps('Link shared. To share the card itself:');
+      return;
+    }
+  } catch (error) {
+    if (error.name === 'AbortError') return; // visitor closed the share menu
   }
-  shareHint.textContent = LONG_PRESS_HINT;
-  scrollToEl($('.card-frame'));
+  showSaveSteps('Sharing is switched off in this browser. To share your card:');
 });
 
 // The download attribute is ignored inside most in-app browsers.
 saveLink.addEventListener('click', () => {
-  shareHint.textContent = `If nothing downloads: ${LONG_PRESS_HINT.toLowerCase()}`;
+  shareHint.textContent = 'If nothing downloads, press and hold the card and choose Save to Photos.';
+});
+
+const copyLink = $('#copy-link');
+if (!navigator.clipboard?.writeText) copyLink.hidden = true;
+copyLink.addEventListener('click', async () => {
+  try {
+    await navigator.clipboard.writeText(pageUrl());
+    shareHint.textContent = 'Link copied. Paste it anywhere.';
+  } catch {
+    shareHint.textContent = `Copy this link: ${pageUrl()}`;
+  }
 });
 
 /* ---------- Compatibility ------------------------------------------------- */
 
 function countUp(el, target) {
-  if (reducedMotion) { el.textContent = target; return; }
+  if (reducedMotion()) { el.textContent = target; return; }
   const start = performance.now();
   const duration = 1100;
   const tick = (now) => {
@@ -278,6 +308,13 @@ function showMatch(date) {
 
 const birthForm = mountDateForm($('#birth-form'), showReading);
 const friendForm = mountDateForm($('#friend-form'), showMatch);
+
+const motionToggle = $('#motion-toggle');
+motionToggle.addEventListener('click', () => {
+  const paused = root.classList.toggle('reduce-motion');
+  motionToggle.setAttribute('aria-pressed', String(paused));
+  motionToggle.textContent = paused ? 'Play animations' : 'Pause animations';
+});
 
 $('#restart').addEventListener('click', () => {
   you = null;

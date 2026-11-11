@@ -16,7 +16,7 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Space+Grotesk:wght@400;500;600&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Atkinson+Hyperlegible+Next:wght@400;600;700&display=swap">
   <!-- Brush font, subset to only the characters the page uses. Update `text=` if you add hanzi. -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&text=%E9%BC%A0%E7%89%9B%E8%99%8E%E5%85%94%E9%BE%99%E8%9B%87%E9%A9%AC%E7%BE%8A%E7%8C%B4%E9%B8%A1%E7%8B%97%E7%8C%AA%E6%9C%A8%E7%81%AB%E5%9C%9F%E9%87%91%E6%B0%B4%E9%98%B4%E9%98%B3%E7%94%9F%E8%82%96%E4%B8%80%E4%BA%8C%E4%B8%89%E5%9B%9B%E4%BA%94&display=swap">
   <link rel="stylesheet" href="css/styles.css">
@@ -88,40 +88,38 @@
         <ol class="cycle" id="cycle" data-reveal aria-label="The five elements"></ol>
       </section>
 
-      <!-- Placeholder: monthly content will be injected into [data-slot="this-month"]. -->
-      <section class="chapter" id="month">
-        <p class="eyebrow" data-reveal><span class="han">三</span> This month</p>
-        <h2 data-reveal>The <span data-bind="animal"></span> this month</h2>
-        <div class="slot" data-slot="this-month" data-reveal>
-          <div class="slot__moon" aria-hidden="true"></div>
-          <p class="slot__title">Coming soon</p>
-          <p>A fresh reading for your sign will land here with each new moon.</p>
-        </div>
-      </section>
-
       <section class="chapter" id="share">
-        <p class="eyebrow" data-reveal><span class="han">四</span> Your card</p>
+        <p class="eyebrow" data-reveal><span class="han">三</span> Your card</p>
         <h2 data-reveal>Keep it. Share it.</h2>
         <figure class="card-frame" data-reveal>
           <img id="card-img" alt="" width="1080" height="1350">
         </figure>
         <div class="actions" data-reveal>
           <button class="btn" id="share-btn" type="button">Share my card</button>
-          <a class="btn btn--ghost" id="save-link" download="my-chinese-zodiac.png">Save image</a>
+          <p class="fineprint" id="share-hint" role="status">Opens your phone&rsquo;s share menu: Instagram, WhatsApp, Facebook and more.</p>
+          <div class="actions__row">
+            <a class="btn btn--ghost" id="save-link" download="my-chinese-zodiac.png">Save image</a>
+            <button class="btn btn--ghost" id="copy-link" type="button">Copy link</button>
+          </div>
         </div>
-        <p class="fineprint" id="share-hint" role="status">Your card shows your sign, element and one trait. No birth date.</p>
+        <ol class="steps" id="share-steps" hidden>
+          <li>Press and hold the card, then choose <strong>Save to Photos</strong>.</li>
+          <li>Open Instagram, WhatsApp or Facebook.</li>
+          <li>Add the card from your photos to a story, post or chat.</li>
+        </ol>
+        <p class="fineprint" data-reveal>Your card shows your sign, element and one trait. Never your birth date.</p>
       </section>
 
       <section class="chapter" id="friend">
-        <p class="eyebrow" data-reveal><span class="han">五</span> Compatibility</p>
-        <h2 data-reveal>Add a friend</h2>
-        <p class="body" data-reveal>Enter a friend&rsquo;s birth date to see how your signs get along.</p>
-        <form class="date-form" id="friend-form" novalidate data-reveal data-legend="Friend&rsquo;s date of birth" data-submit="Check compatibility"></form>
+        <p class="eyebrow" data-reveal><span class="han">四</span> Family &amp; friends</p>
+        <h2 data-reveal>Who&rsquo;s at your table?</h2>
+        <p class="body" data-reveal>Getting together for Lunar New Year? Add a relative&rsquo;s or friend&rsquo;s birth date and see how your signs sit side by side.</p>
+        <form class="date-form" id="friend-form" novalidate data-reveal data-legend="Their date of birth" data-submit="Compare our signs"></form>
 
         <div class="match" id="match" hidden aria-live="polite">
           <div class="match__pair" aria-hidden="true">
             <div class="match__sign"><span class="han" data-match="youHanzi"></span></div>
-            <div class="match__score"><span id="match-score">0</span><small>/ 100</small></div>
+            <div class="match__score"><span id="match-score">0</span><small>Harmony</small></div>
             <div class="match__sign"><span class="han" data-match="friendHanzi"></span></div>
           </div>
           <p class="match__names"><span data-match="youName"></span> + <span data-match="friendName"></span></p>
@@ -131,8 +129,20 @@
         </div>
       </section>
 
+      <!-- Placeholder: monthly content will be injected into [data-slot="this-month"]. -->
+      <section class="chapter" id="month">
+        <p class="eyebrow" data-reveal><span class="han">五</span> This month</p>
+        <h2 data-reveal>The <span data-bind="animal"></span> this month</h2>
+        <div class="slot" data-slot="this-month" data-reveal>
+          <div class="slot__moon" aria-hidden="true"></div>
+          <p class="slot__title">Coming soon</p>
+          <p>A fresh reading for your sign will land here with each new moon.</p>
+        </div>
+      </section>
+
       <footer class="footer">
         <button class="btn btn--ghost" id="restart" type="button">Start again</button>
+        <button class="btn btn--ghost" id="motion-toggle" type="button" aria-pressed="false">Pause animations</button>
         <p class="fineprint">For fun and tradition, not a prediction. Some traditions start the zodiac year at Lichun (around 4&nbsp;February); this page uses Lunar New Year.</p>
         <p class="fineprint">Nothing you enter is stored or leaves this page.</p>
       </footer>

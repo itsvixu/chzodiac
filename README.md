@@ -29,6 +29,7 @@ npm test    # unit tests (Node 20+)
 | `js/sky.js` | Starfield background and scroll progress. |
 | `js/card.js` | Draws the 1080 x 1350 share card on a canvas. |
 | `tests/` | Unit tests for the date table and logic. |
+| `concepts/` | Illustration direction concepts (Monkey and Rooster) for sign-off. Not part of the live flow. |
 
 ### Zodiac rules
 
@@ -51,6 +52,31 @@ data anywhere. The share card carries sign, element and one trait only.
 
 The one third-party request is Google Fonts (see the checklist below).
 
+### Accessibility
+
+- Text colours are set as tokens in `css/styles.css` and chosen to meet WCAG AA
+  (4.5:1) against both the darkest and lightest parts of the background; most
+  body copy meets AAA (7:1). Control borders meet 3:1.
+- No text is smaller than 13px, and body copy is 17px.
+- Body font is Atkinson Hyperlegible Next, designed by the Braille Institute so
+  that similar letters (I, l, 1, O, 0) stay distinct.
+- Motion pauses for visitors with `prefers-reduced-motion`, and there is a
+  "Pause animations" switch in the footer for everyone else.
+- Form errors are announced, name the field and move focus to it.
+- Decorative graphics are hidden from screen readers; the share card has alt text.
+
+Still to do: a screen reader pass on VoiceOver and TalkBack, and a contrast
+check with a measuring tool rather than by calculation.
+
+### Sharing
+
+One "Share my card" button opens the phone's own share menu, which lists the
+apps the visitor has installed and passes the image itself. There are no
+Instagram / WhatsApp / Facebook buttons on the page: a web page cannot hand an
+image to those apps directly, so brand buttons could only share a link. Where
+the share menu is unavailable (some in-app browsers), the page shows three
+steps for saving the card and adding it from Photos.
+
 ### In-app browsers
 
 Built for Instagram and TikTok webviews:
@@ -64,6 +90,7 @@ Built for Instagram and TikTok webviews:
 
 ## Before launch
 
+- [ ] Choose an illustration direction (`concepts/illustrations.html`) and draw the other ten signs.
 - [ ] Fill the "This month" slot (`[data-slot="this-month"]` in `index.html`).
 - [ ] Test on real devices inside Instagram and TikTok (iOS and Android).
 - [ ] Self-host the fonts so no request goes to Google.

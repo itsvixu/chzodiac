@@ -760,8 +760,6 @@ h1::after {
 
 /* ---------- Footer ------------------------------------------------------- */
 
-.footer .btn { min-height: 3.25rem; }
-
 .footer {
   display: grid;
   gap: 1rem;
@@ -790,18 +788,3 @@ h1::after {
   .sky__twinkles span { opacity: 0.7; }
 }
 
-/* Same rules for the on-page "Pause animations" switch (html.reduce-motion). */
-.reduce-motion { scroll-behavior: auto; }
-
-.reduce-motion *,
-.reduce-motion *::before,
-.reduce-motion *::after {
-  animation-duration: 0.01ms !important;
-  animation-iteration-count: 1 !important;
-  animation-delay: 0s !important;
-  transition-duration: 0.01ms !important;
-  transition-delay: 0s !important;
-}
-
-.reduce-motion .sky__comet { display: none; }
-.reduce-motion .sky__twinkles span { opacity: 0.7; }

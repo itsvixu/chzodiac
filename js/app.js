@@ -13,8 +13,8 @@ const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
 
 const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
 const root = document.documentElement;
-/** True when the device asks for less motion or the visitor paused animations here. */
-const reducedMotion = () => motionQuery.matches || root.classList.contains('reduce-motion');
+/** True when the device asks for less motion. */
+const reducedMotion = () => motionQuery.matches;
 
 const story = $('#story');
 const revealSection = $('#reveal');
@@ -64,8 +64,7 @@ function mountDateForm(form, onDate) {
       return;
     }
     error.textContent = '';
-    document.activeElement?.blur(); // drop the keyboard before we scroll
-    onDate(result.date);
+    whenKeyboardCloses(() => onDate(result.date));
   });
 
   return {
@@ -97,8 +96,47 @@ function armReveals() {
   });
 }
 
+let settleTimer = 0;
+
 function scrollToEl(el) {
   el.scrollIntoView({ behavior: reducedMotion() ? 'auto' : 'smooth', block: 'start' });
+  // Safety net: if something cut the scroll short (a closing keyboard, a
+  // collapsing toolbar), finish the job once things have settled.
+  clearTimeout(settleTimer);
+  settleTimer = setTimeout(() => {
+    if (Math.abs(el.getBoundingClientRect().top) > 12) {
+      el.scrollIntoView({ behavior: 'auto', block: 'start' });
+    }
+  }, 900);
+}
+
+// Never fight the visitor: if they start scrolling themselves, leave it alone.
+for (const type of ['touchstart', 'wheel']) {
+  window.addEventListener(type, () => clearTimeout(settleTimer), { passive: true });
+}
+
+/**
+ * Closes the on-screen keyboard, then runs `callback` once it has gone.
+ * On Android the visible area is still growing while the keyboard slides
+ * away, and a scroll started during that time stops short of its target.
+ */
+function whenKeyboardCloses(callback) {
+  const viewport = window.visualViewport;
+  const keyboardHeight = () => (viewport ? window.innerHeight - viewport.height : 0);
+  const wasOpen = keyboardHeight() > 120;
+  document.activeElement?.blur();
+  if (!wasOpen) { callback(); return; }
+
+  let done = false;
+  const finish = () => {
+    if (done) return;
+    done = true;
+    viewport.removeEventListener('resize', onResize);
+    requestAnimationFrame(callback);
+  };
+  const onResize = () => { if (keyboardHeight() < 120) finish(); };
+  viewport.addEventListener('resize', onResize);
+  setTimeout(finish, 600); // in case no resize event arrives
 }
 
 /* ---------- Reveal -------------------------------------------------------- */
@@ -311,13 +349,6 @@ function showMatch(date) {
 
 const birthForm = mountDateForm($('#birth-form'), showReading);
 const friendForm = mountDateForm($('#friend-form'), showMatch);
-
-const motionToggle = $('#motion-toggle');
-motionToggle.addEventListener('click', () => {
-  const paused = root.classList.toggle('reduce-motion');
-  motionToggle.setAttribute('aria-pressed', String(paused));
-  motionToggle.textContent = paused ? 'Play animations' : 'Pause animations';
-});
 
 $('#restart').addEventListener('click', () => {
   you = null;

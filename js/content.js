@@ -132,7 +132,7 @@ export const POLARITY_INFO = {
 export const ANIMAL_RELATION_COPY = {
   harmony: {
     title: 'Secret friends',
-    text: 'One of the six harmonies: signs that tradition says quietly look out for each other. Seat these two together at the reunion dinner.',
+    text: 'One of the six harmonies: signs that tradition says quietly look out for each other. A bond that holds up over any distance.',
   },
   trine: {
     title: 'Kindred spirits',
@@ -148,11 +148,11 @@ export const ANIMAL_RELATION_COPY = {
   },
   harm: {
     title: 'Worth the effort',
-    text: 'Tradition says these signs can rub each other the wrong way. Name the friction early and it usually becomes a family joke.',
+    text: 'Tradition says these signs can rub each other the wrong way. Name the friction early and it usually becomes a running joke.',
   },
   clash: {
     title: 'Opposites on the wheel',
-    text: 'You sit directly across the wheel from each other, which makes for lively dinners. Opposites see what the other misses, when they are willing to listen.',
+    text: 'You sit directly across the wheel from each other, which makes for lively conversations. Opposites see what the other misses, when they are willing to listen.',
   },
 };
 

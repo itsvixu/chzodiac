@@ -61,8 +61,7 @@ The one third-party request is Google Fonts (see the checklist below).
 - No text is smaller than 13px, and body copy is 17px.
 - Body font is Atkinson Hyperlegible Next, designed by the Braille Institute so
   that similar letters (I, l, 1, O, 0) stay distinct.
-- Motion pauses for visitors with `prefers-reduced-motion`, and there is a
-  "Pause animations" switch in the footer for everyone else.
+- Motion pauses for visitors with `prefers-reduced-motion`.
 - Form errors are announced, name the field and move focus to it.
 - Decorative graphics are hidden from screen readers; the share card has alt text.
 

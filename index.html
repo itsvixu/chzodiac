@@ -36,7 +36,7 @@
       <h1>Your sign, written in the stars</h1>
       <p class="lede">Enter your birth date to find your animal and element, set by the true Lunar New Year rather than 1&nbsp;January.</p>
       <form class="date-form" id="birth-form" novalidate data-legend="Your date of birth" data-submit="Reveal my sign"></form>
-      <p class="fineprint">Worked out on your phone. Nothing is stored or sent.</p>
+      <p class="fineprint">Your birth date is only used on this device. It is never stored or shared.</p>
     </section>
 
     <div id="story" hidden>
@@ -112,21 +112,22 @@
       </section>
 
       <section class="chapter" id="friend">
-        <p class="eyebrow" data-reveal><span class="han">四</span> Family &amp; friends</p>
-        <h2 data-reveal>Who&rsquo;s at your table?</h2>
-        <p class="body" data-reveal>Getting together for Lunar New Year? Add a relative&rsquo;s or friend&rsquo;s birth date and see how your signs sit side by side.</p>
-        <form class="date-form" id="friend-form" novalidate data-reveal data-legend="Their date of birth" data-submit="Compare our signs"></form>
+        <p class="eyebrow" data-reveal><span class="han">四</span> Compatibility</p>
+        <h2 data-reveal>How well do your signs match?</h2>
+        <p class="body" data-reveal>Add a family member&rsquo;s or friend&rsquo;s birth date to see how compatible your signs are, wherever in the world they are.</p>
+        <form class="date-form" id="friend-form" novalidate data-reveal data-legend="Their date of birth" data-submit="Check compatibility"></form>
 
         <div class="match" id="match" hidden aria-live="polite">
           <div class="match__pair" aria-hidden="true">
             <div class="match__sign"><span class="han" data-match="youHanzi"></span></div>
-            <div class="match__score"><span id="match-score">0</span><small>Harmony</small></div>
+            <div class="match__score"><span id="match-score">0</span><small>Compatibility</small></div>
             <div class="match__sign"><span class="han" data-match="friendHanzi"></span></div>
           </div>
           <p class="match__names"><span data-match="youName"></span> + <span data-match="friendName"></span></p>
           <h3 class="match__title" id="match-title" tabindex="-1" data-match="title"></h3>
           <p class="body" data-match="text"></p>
           <p class="fineprint" data-match="elements"></p>
+          <p class="fineprint">Send them this page so they can find their own sign and compare back.</p>
         </div>
       </section>
 
@@ -143,9 +144,8 @@
 
       <footer class="footer">
         <button class="btn btn--ghost" id="restart" type="button">Start again</button>
-        <button class="btn btn--ghost" id="motion-toggle" type="button" aria-pressed="false">Pause animations</button>
         <p class="fineprint">For fun and tradition, not a prediction. Some traditions start the zodiac year at Lichun (around 4&nbsp;February); this page uses Lunar New Year.</p>
-        <p class="fineprint">Nothing you enter is stored or leaves this page.</p>
+        <p class="fineprint">Birth dates are only used on this device. They are never stored or shared.</p>
       </footer>
     </div>
   </main>

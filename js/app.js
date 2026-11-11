@@ -52,6 +52,24 @@ function mountDateForm(form, onDate) {
     });
   });
 
+  // Keep the fields in view while the keyboard is up.
+  const row = $('.date-form__row', form);
+  let focusTimers = [];
+  form.addEventListener('focusin', (event) => {
+    if (!inputs.includes(event.target)) return;
+    focusTimers.forEach(clearTimeout);
+    // Check as the keyboard slides in and once it has settled.
+    focusTimers = [250, 600].map((ms) => setTimeout(() => keepAboveKeyboard(row), ms));
+    // Last resort: if the page had no room to scroll, make some and try again.
+    focusTimers.push(setTimeout(() => keepAboveKeyboard(row, { makeRoom: true }), 1100));
+  });
+  form.addEventListener('focusout', () => {
+    focusTimers.forEach(clearTimeout);
+    setTimeout(() => {
+      if (!form.contains(document.activeElement)) form.closest('.chapter').classList.remove('needs-room');
+    }, 100);
+  });
+
   form.addEventListener('submit', (event) => {
     event.preventDefault();
     inputs.forEach((input) => input.removeAttribute('aria-invalid'));
@@ -133,11 +151,39 @@ for (const type of ['touchstart', 'wheel', 'keydown']) {
 }
 
 // A viewport resize while settling (keyboard or toolbar finishing) gets a prompt re-check.
+let typingTimers = [];
 function onViewportResize() {
   if (settleTarget) settleTimers.push(setTimeout(snapToTarget, 250));
+  // The keyboard arriving is a resize too: make sure the field being typed in is still visible.
+  const row = document.activeElement?.closest?.('.date-form__row');
+  if (row) {
+    typingTimers.forEach(clearTimeout);
+    typingTimers = [
+      setTimeout(() => keepAboveKeyboard(row), 200),
+      // Still hidden after that scroll? The page had no room: add some and retry.
+      setTimeout(() => keepAboveKeyboard(row, { makeRoom: true }), 900),
+    ];
+  }
 }
 window.addEventListener('resize', onViewportResize, { passive: true });
 window.visualViewport?.addEventListener('resize', onViewportResize, { passive: true });
+
+/**
+ * Scrolls `el` into the part of the screen the keyboard is not covering.
+ * Browsers usually do this themselves; this is the backstop for when they do not.
+ */
+function keepAboveKeyboard(el, { makeRoom = false } = {}) {
+  if (!window.matchMedia('(pointer: coarse)').matches) return;
+  const viewport = window.visualViewport;
+  const visibleTop = viewport ? viewport.offsetTop : 0;
+  const visibleBottom = visibleTop + (viewport ? viewport.height : window.innerHeight);
+  const rect = el.getBoundingClientRect();
+  if (rect.top < visibleTop + 8 || rect.bottom > visibleBottom - 8) {
+    stopSettling();
+    if (makeRoom) el.closest('.chapter').classList.add('needs-room');
+    el.scrollIntoView({ behavior: reducedMotion() ? 'auto' : 'smooth', block: 'center' });
+  }
+}
 
 /**
  * Closes the on-screen keyboard, then runs `callback` once it has gone.

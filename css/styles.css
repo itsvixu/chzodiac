@@ -217,6 +217,9 @@ h1::after {
   to { opacity: 1; transform: none; }
 }
 
+/* Added from js/app.js only when the keyboard hides the fields and the page cannot scroll. */
+.chapter.needs-room { padding-bottom: 22rem; }
+
 /* ---------- Date form ---------------------------------------------------- */
 
 .date-form { margin-top: 0.5rem; }

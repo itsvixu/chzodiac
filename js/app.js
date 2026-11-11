@@ -96,47 +96,80 @@ function armReveals() {
   });
 }
 
-let settleTimer = 0;
+/* Scrolling to a chapter.
+ *
+ * On phones the target can move after we start: the keyboard is still sliding
+ * away, the browser toolbar collapses, and chapter heights (100svh) change
+ * with them. So after the first scroll we keep checking for a short while and
+ * snap to the target if it has drifted. Any touch from the visitor cancels
+ * that, so we never fight their own scrolling.
+ */
+let settleTimers = [];
+let settleTarget = null;
+
+function stopSettling() {
+  settleTimers.forEach(clearTimeout);
+  settleTimers = [];
+  settleTarget = null;
+}
+
+function snapToTarget() {
+  if (!settleTarget) return;
+  const offset = settleTarget.getBoundingClientRect().top;
+  if (Math.abs(offset) > 12) window.scrollTo(0, window.scrollY + offset); // instant
+}
 
 function scrollToEl(el) {
+  stopSettling();
   el.scrollIntoView({ behavior: reducedMotion() ? 'auto' : 'smooth', block: 'start' });
-  // Safety net: if something cut the scroll short (a closing keyboard, a
-  // collapsing toolbar), finish the job once things have settled.
-  clearTimeout(settleTimer);
-  settleTimer = setTimeout(() => {
-    if (Math.abs(el.getBoundingClientRect().top) > 12) {
-      el.scrollIntoView({ behavior: 'auto', block: 'start' });
-    }
-  }, 900);
+  settleTarget = el;
+  // First check lands after the smooth scroll has normally finished.
+  settleTimers = [900, 1400, 2000, 2800].map((ms) => setTimeout(snapToTarget, ms));
+  settleTimers.push(setTimeout(stopSettling, 3000));
 }
 
-// Never fight the visitor: if they start scrolling themselves, leave it alone.
-for (const type of ['touchstart', 'wheel']) {
-  window.addEventListener(type, () => clearTimeout(settleTimer), { passive: true });
+for (const type of ['touchstart', 'wheel', 'keydown']) {
+  window.addEventListener(type, stopSettling, { passive: true });
 }
+
+// A viewport resize while settling (keyboard or toolbar finishing) gets a prompt re-check.
+function onViewportResize() {
+  if (settleTarget) settleTimers.push(setTimeout(snapToTarget, 250));
+}
+window.addEventListener('resize', onViewportResize, { passive: true });
+window.visualViewport?.addEventListener('resize', onViewportResize, { passive: true });
 
 /**
  * Closes the on-screen keyboard, then runs `callback` once it has gone.
- * On Android the visible area is still growing while the keyboard slides
- * away, and a scroll started during that time stops short of its target.
+ * We cannot ask the browser whether a keyboard is showing, so on touch
+ * devices with a text field focused we assume it is, and wait for the
+ * viewport to report a resize (or a short timeout if it never does).
  */
 function whenKeyboardCloses(callback) {
-  const viewport = window.visualViewport;
-  const keyboardHeight = () => (viewport ? window.innerHeight - viewport.height : 0);
-  const wasOpen = keyboardHeight() > 120;
-  document.activeElement?.blur();
-  if (!wasOpen) { callback(); return; }
+  const field = document.activeElement;
+  const typing = field instanceof HTMLInputElement && window.matchMedia('(pointer: coarse)').matches;
+  field?.blur();
+  if (!typing) { callback(); return; }
 
+  const viewport = window.visualViewport;
   let done = false;
+  let quiet = 0;
   const finish = () => {
     if (done) return;
     done = true;
-    viewport.removeEventListener('resize', onResize);
+    clearTimeout(quiet);
+    viewport?.removeEventListener('resize', onResize);
+    window.removeEventListener('resize', onResize);
     requestAnimationFrame(callback);
   };
-  const onResize = () => { if (keyboardHeight() < 120) finish(); };
-  viewport.addEventListener('resize', onResize);
-  setTimeout(finish, 600); // in case no resize event arrives
+  // The keyboard animates out over several resize events: wait until they stop.
+  const onResize = () => {
+    clearTimeout(quiet);
+    quiet = setTimeout(finish, 120);
+  };
+  viewport?.addEventListener('resize', onResize);
+  window.addEventListener('resize', onResize);
+  setTimeout(finish, 700); // no resize reported (keyboard was already closed)
 }
 
 /* ---------- Reveal -------------------------------------------------------- */

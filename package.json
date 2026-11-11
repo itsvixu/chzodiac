@@ -1,0 +1,14 @@
+{
+  "name": "chinese-zodiac",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Mobile-first scrollytelling Chinese zodiac reveal. Calculated in the browser, stores nothing.",
+  "type": "module",
+  "scripts": {
+    "start": "node scripts/serve.mjs",
+    "test": "node --test"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

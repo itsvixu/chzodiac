@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Your Chinese zodiac, written in the stars</title>
+  <meta name="description" content="Enter your birth date to reveal your Chinese zodiac animal and element, set by the true Lunar New Year. Worked out on your phone. Nothing is stored.">
+  <meta name="theme-color" content="#07061a">
+  <meta name="referrer" content="no-referrer">
+  <!-- No connect-src: the page cannot send data anywhere. -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'none'; base-uri 'none'; form-action 'none'">
+  <meta property="og:title" content="Your Chinese zodiac, written in the stars">
+  <meta property="og:description" content="Find your animal and element by the true Lunar New Year.">
+  <meta property="og:type" content="website">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23d63a2a'/%3E%3Ccircle cx='32' cy='32' r='15' fill='none' stroke='%23f0c36a' stroke-width='4'/%3E%3Ccircle cx='32' cy='17' r='4' fill='%23f0c36a'/%3E%3C/svg%3E">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Space+Grotesk:wght@400;500;600&display=swap">
+  <!-- Brush font, subset to only the characters the page uses. Update `text=` if you add hanzi. -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&text=%E9%BC%A0%E7%89%9B%E8%99%8E%E5%85%94%E9%BE%99%E8%9B%87%E9%A9%AC%E7%BE%8A%E7%8C%B4%E9%B8%A1%E7%8B%97%E7%8C%AA%E6%9C%A8%E7%81%AB%E5%9C%9F%E9%87%91%E6%B0%B4%E9%98%B4%E9%98%B3%E7%94%9F%E8%82%96%E4%B8%80%E4%BA%8C%E4%B8%89%E5%9B%9B%E4%BA%94&display=swap">
+  <link rel="stylesheet" href="css/styles.css">
+  <script type="module" src="js/app.js"></script>
+</head>
+<body>
+  <div class="sky" aria-hidden="true">
+    <canvas class="sky__stars" id="sky"></canvas>
+    <div class="sky__twinkles" id="twinkles"></div>
+    <span class="sky__comet"></span>
+  </div>
+  <div class="progress" aria-hidden="true"><span id="progress"></span></div>
+
+  <main>
+    <section class="chapter intro" id="intro">
+      <p class="eyebrow"><span class="han">生肖</span> Chinese zodiac</p>
+      <h1>Your sign, written in the stars</h1>
+      <p class="lede">Enter your birth date to find your animal and element, set by the true Lunar New Year rather than 1&nbsp;January.</p>
+      <form class="date-form" id="birth-form" novalidate data-legend="Your date of birth" data-submit="Reveal my sign"></form>
+      <p class="fineprint">Worked out on your phone. Nothing is stored or sent.</p>
+    </section>
+
+    <div id="story" hidden>
+      <section class="chapter reveal" id="reveal" aria-live="polite">
+        <p class="eyebrow" data-reveal>You were born in the year of the</p>
+        <div class="wheel" id="wheel" aria-hidden="true">
+          <div class="wheel__orbit wheel__orbit--outer"></div>
+          <div class="wheel__orbit wheel__orbit--inner"></div>
+          <span class="wheel__pointer"></span>
+          <div class="wheel__ring" id="wheel-ring"></div>
+          <div class="wheel__core"><span class="han" data-bind="hanzi"></span></div>
+        </div>
+        <h2 class="reveal__name" id="reveal-name" tabindex="-1">
+          <span data-bind="element"></span> <span data-bind="animal"></span>
+        </h2>
+        <p class="reveal__pinyin"><span data-bind="pinyin"></span> · lunar year <span data-bind="zodiacYear"></span></p>
+        <p class="reveal__note" data-bind="note"></p>
+        <p class="scroll-cue" aria-hidden="true">Scroll<span></span></p>
+      </section>
+
+      <section class="chapter" id="traits">
+        <p class="eyebrow" data-reveal><span class="han">一</span> Traits</p>
+        <h2 data-reveal>The <span data-bind="animal"></span></h2>
+        <p class="body" data-reveal data-bind="blurb"></p>
+        <ul class="chips" id="trait-chips"></ul>
+        <div class="pair">
+          <div class="note-card" data-reveal>
+            <h3>At your best</h3>
+            <p data-bind="strength"></p>
+          </div>
+          <div class="note-card" data-reveal>
+            <h3>Watch for</h3>
+            <p data-bind="watch"></p>
+          </div>
+        </div>
+      </section>
+
+      <section class="chapter element" id="element">
+        <p class="eyebrow" data-reveal><span class="han">二</span> Element</p>
+        <div class="orb" data-reveal aria-hidden="true"><span class="han" data-bind="elementHanzi"></span></div>
+        <h2 data-reveal><span data-bind="element"></span>, <span data-bind="polarity"></span></h2>
+        <p class="body" data-reveal data-bind="elementBlurb"></p>
+        <dl class="facts" data-reveal>
+          <div><dt>Planet</dt><dd data-bind="planet"></dd></div>
+          <div><dt>Season</dt><dd data-bind="season"></dd></div>
+          <div><dt>Polarity</dt><dd><span class="han" data-bind="polarityHanzi"></span> <span data-bind="polarity"></span></dd></div>
+        </dl>
+        <p class="fineprint" data-reveal data-bind="polarityBlurb"></p>
+        <ol class="cycle" id="cycle" data-reveal aria-label="The five elements"></ol>
+      </section>
+
+      <!-- Placeholder: monthly content will be injected into [data-slot="this-month"]. -->
+      <section class="chapter" id="month">
+        <p class="eyebrow" data-reveal><span class="han">三</span> This month</p>
+        <h2 data-reveal>The <span data-bind="animal"></span> this month</h2>
+        <div class="slot" data-slot="this-month" data-reveal>
+          <div class="slot__moon" aria-hidden="true"></div>
+          <p class="slot__title">Coming soon</p>
+          <p>A fresh reading for your sign will land here with each new moon.</p>
+        </div>
+      </section>
+
+      <section class="chapter" id="share">
+        <p class="eyebrow" data-reveal><span class="han">四</span> Your card</p>
+        <h2 data-reveal>Keep it. Share it.</h2>
+        <figure class="card-frame" data-reveal>
+          <img id="card-img" alt="" width="1080" height="1350">
+        </figure>
+        <div class="actions" data-reveal>
+          <button class="btn" id="share-btn" type="button">Share my card</button>
+          <a class="btn btn--ghost" id="save-link" download="my-chinese-zodiac.png">Save image</a>
+        </div>
+        <p class="fineprint" id="share-hint" role="status">Your card shows your sign, element and one trait. No birth date.</p>
+      </section>
+
+      <section class="chapter" id="friend">
+        <p class="eyebrow" data-reveal><span class="han">五</span> Compatibility</p>
+        <h2 data-reveal>Add a friend</h2>
+        <p class="body" data-reveal>Enter a friend&rsquo;s birth date to see how your signs get along.</p>
+        <form class="date-form" id="friend-form" novalidate data-reveal data-legend="Friend&rsquo;s date of birth" data-submit="Check compatibility"></form>
+
+        <div class="match" id="match" hidden aria-live="polite">
+          <div class="match__pair" aria-hidden="true">
+            <div class="match__sign"><span class="han" data-match="youHanzi"></span></div>
+            <div class="match__score"><span id="match-score">0</span><small>/ 100</small></div>
+            <div class="match__sign"><span class="han" data-match="friendHanzi"></span></div>
+          </div>
+          <p class="match__names"><span data-match="youName"></span> + <span data-match="friendName"></span></p>
+          <h3 class="match__title" id="match-title" tabindex="-1" data-match="title"></h3>
+          <p class="body" data-match="text"></p>
+          <p class="fineprint" data-match="elements"></p>
+        </div>
+      </section>
+
+      <footer class="footer">
+        <button class="btn btn--ghost" id="restart" type="button">Start again</button>
+        <p class="fineprint">For fun and tradition, not a prediction. Some traditions start the zodiac year at Lichun (around 4&nbsp;February); this page uses Lunar New Year.</p>
+        <p class="fineprint">Nothing you enter is stored or leaves this page.</p>
+      </footer>
+    </div>
+  </main>
+
+  <template id="date-fields">
+    <fieldset>
+      <legend></legend>
+      <div class="date-form__row">
+        <label>
+          <span>Day</span>
+          <input name="day" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="2" placeholder="DD" autocomplete="off" required>
+        </label>
+        <label>
+          <span>Month</span>
+          <input name="month" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="2" placeholder="MM" autocomplete="off" required>
+        </label>
+        <label class="date-form__year">
+          <span>Year</span>
+          <input name="year" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="4" placeholder="YYYY" autocomplete="off" required>
+        </label>
+      </div>
+      <p class="date-form__error" role="alert"></p>
+      <button class="btn" type="submit"></button>
+    </fieldset>
+  </template>
+
+  <noscript><p class="noscript">This page needs JavaScript to work out your sign on your device.</p></noscript>
+</body>
+</html>
